@@ -3,6 +3,25 @@ In this guide we provide step-by-step instructions for installing [docker](https
 
 For doubts or problems, please contact me [here](mailto:alberto.coppi@studenti.unipd.it) or open an issue [here](https://github.com/c0pp1/ScientificComputing4PhyicsStudents-projects/issues/new/choose).
 
+## Table of Contents
+
+- [1. Install Docker](#1.-install-docker)
+    - [1.0 Prerequisites](#1.0-prerequisites)
+    - [1.1 Docker Desktop (GUI)](#1.1-docker-desktop-(gui))
+      - [1.1.1 Ubuntu](#1.1.1-ubuntu)
+      - [1.1.2 Arch Linux](#1.1.2-arch-linux)
+    - [1.2 Docker engine (CLI)](#1.2-docker-engine-(cli))
+      - [1.2.1 Ubuntu](#1.2.1-ubuntu)
+      - [1.2.2 Arch Linux](#1.2.2-arch-linux)
+    - [1.3 Daemon configuration file](#1.3-daemon-configuration-file)
+- [2. Run AlmaLinux 9 in a container](#2.-run-almalinux-9-in-a-container)
+    - [2.1 Using Docker Desktop](#2.1-using-docker-desktop)
+    - [2.2 Using Docker CLI](#2.2-using-docker-cli)
+- [3. Attach Visual Studio Code to a container](#3.-attach-visual-studio-code-to-a-container)
+    - [3.0 Install the Remote - Containers extension](#3.0-install-the-remote---containers-extension)
+    - [3.1 Attach to a running container](#3.1-attach-to-a-running-container)
+    - [3.2 Configure the `devcontainer.json`](#3.2-configure-the-`devcontainer.json`)
+
 ## 1. Install Docker
 ### 1.0 Prerequisites
 To install Docker a linux system you need the following:
