@@ -257,3 +257,128 @@ The following is a full example of the allowed configuration options on Linux:
   "userns-remap": ""
 }
 ```
+
+## 2. Run AlmaLinux 9 in a container
+In the following we explain how to run a docker container with the AlmaLinux 9 image. We provide instructions for both [Docker Desktop](#21-using-docker-desktop) and [Docker CLI](#22-using-docker-cli)
+
+### 2.1 Using Docker Desktop
+
+1. **Open Docker Desktop.**
+
+2. **Pull the AlmaLinux 9 image:**
+    - Go to the "Images" tab.
+    - Click on the "Pull" button.
+    - Enter `almalinux:9` and click "Pull".
+
+3. **Run a container using the pulled image:**
+    - Go to the "Containers" tab.
+    - Click on the "Run" button next to the `almalinux:9` image.
+    - In the dialog that appears, you can set the container name (e.g., `almalinux9-container`).
+    - Ensure the "Interactive & TTY" option is checked to open an interactive terminal session.
+    - Click "Run".
+
+4. **Verify the container is running:**
+    - Go to the "Containers" tab.
+    - You should see `almalinux9-container` listed and running.
+
+### 2.2 Using Docker CLI
+
+1. **Pull the AlmaLinux 9 image from Docker Hub:**
+    ```bash
+    sudo docker pull almalinux:9
+    ```
+
+2. **Run a container using the pulled image:**
+    ```bash
+    sudo docker run -it --name almalinux9-container almalinux:9
+    ```
+
+    This command will start a new container named `almalinux9-container` and open an interactive terminal session inside it. Optionally you can
+    ```
+    dnf -y upgrade
+    ```
+    To upgrade all the installed packages to the latest version.
+
+3. **Verify the container is running:**
+    ```bash
+    sudo docker ps
+    ```
+
+    You should see `almalinux9-container` listed in the output.
+
+## 3. Attach Visual Studio Code to a container
+
+Visual Studio Code provides a convenient way to develop inside a Docker container using the Remote - Containers extension. You can either attach to a running container or let VS Code crete one for you, configuring the `devcontainer.json` for your repository.
+
+### 3.1 Attach to a running container
+Follow these steps to attach VS Code to your running AlmaLinux 9 container:
+
+1. **Install the Remote - Containers extension:**
+    - Open Visual Studio Code.
+    - Go to the Extensions view by clicking on the Extensions icon in the Activity Bar on the side of the window.
+    - Search for "Remote - Containers" and install the extension.
+
+2. **Open the Command Palette:**
+    - Press `Ctrl+Shift+P` to open the Command Palette.
+
+3. **Attach to the running container:**
+    - In the Command Palette, type `Remote-Containers: Attach to Running Container...` and select it.
+    - You will see a list of running containers. Select `almalinux9-container` from the list.
+
+4. **Start developing inside the container:**
+    - VS Code will open a new window attached to the `almalinux9-container`.
+    - You can now open folders, edit files, and run commands inside the container as if you were working on your local machine.
+
+### 3.2 Configure the `devcontainer.json`
+
+To configure a development container using `devcontainer.json`, follow these steps:
+
+1. **Create a `.devcontainer` folder in your project root:**
+    ```bash
+    mkdir .devcontainer
+    ```
+
+2. **Create a `devcontainer.json` file inside the `.devcontainer` folder:**
+    ```bash
+    touch .devcontainer/devcontainer.json
+    ```
+    Otherwise you can just create a `.devcontainer.json` in your project root. (pay attention to the initial dot!)
+
+3. **Edit the `devcontainer.json` file with the following content:**
+    ```json
+    {
+        "name": "AlmaLinux 9 Development Container",
+        "image": "almalinux:9",
+        "runArgs": ["--name", "almalinux9-container"],
+        "settings": {
+            "terminal.integrated.shell.linux": "/bin/bash"
+        },
+        "extensions": [
+            "ms-vscode.cpptools",
+            "ms-python.python"
+        ],
+        "postCreateCommand": "dnf -y upgrade && dnf install -y git",
+        "remoteUser": "root"
+    }
+    ```
+
+    This configuration specifies:
+    - The name of the development container.
+    - The Docker image to use (`almalinux:9`).
+    - Additional arguments to pass when running the container.
+    - VS Code settings to apply inside the container.
+    - Extensions to install in the container (I put extension for C++ and Python but you can customize this with your preferred extensions).
+    - A command to run after the container is created (e.g., installing Git).
+    - The user to use inside the container (`root`).
+
+4. **Open the project in VS Code:**
+    - Open Visual Studio Code.
+    - Open the project folder containing the `.devcontainer` folder.
+
+5. **Reopen the folder in the container:**
+    - Press `Ctrl+Shift+P` to open the Command Palette.
+    - Type `Remote-Containers: Reopen in Container` and select it.
+
+VS Code will build the container according to the `devcontainer.json` configuration and reopen the project inside the container. You can now develop inside the AlmaLinux 9 container with all the specified settings and extensions.
+
+By following these steps, you can leverage the full power of Visual Studio Code to develop inside your AlmaLinux 9 container.
