@@ -82,12 +82,12 @@ Recommended approach to install Docker Desktop on Ubuntu:
     sudo apt-get install ./docker-desktop-amd64.deb
     ```
 
-    > [!NOTE]  
-    > At the end of the installation process, apt displays an error due to installing a downloaded package. You can ignore this error message.  
+> [!NOTE]  
+> At the end of the installation process, apt displays an error due to installing a downloaded package. You can ignore this error message.  
 >
-    > ```bash
-    > N: Download is performed unsandboxed as root, as file '/home/user/Downloads/docker-desktop.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)
-    > ```
+> ```bash
+> N: Download is performed unsandboxed as root, as file '/home/user/Downloads/docker-desktop.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)
+> ```
 
 #### 1.1.2 Arch Linux
 
@@ -203,12 +203,12 @@ To install docker-ce do the following:
     sudo systemctl start docker
     ```
 
-    > [!NOTE]  
-    > The previous command will start the Docker Engine services for your current boot. If you wish the service to start automatically, you can enable the service.
+> [!NOTE]  
+> The previous command will start the Docker Engine services for your current boot. If you wish the service to start automatically, you can enable the service.
 >
-    > ```bash
-    > sudo systemctl enable docker
-    > ```
+> ```bash
+> sudo systemctl enable docker
+> ```
 
 ### 1.3 Post-installation (optional)
 
