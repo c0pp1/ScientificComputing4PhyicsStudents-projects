@@ -1,5 +1,5 @@
 # Installing Docker on Linux-based OS and running AlmaLinux9
-In this guide we provide step-by-step instructions for installing [docker](https://www.docker.com/) on linux-based OS and spinning up a container with `AlmaLinux9`, the base environment we will use for developing the projects of this course.
+In this guide we provide step-by-step instructions for installing [docker](https://www.docker.com/) on Linux-based OS and spinning up a container with `AlmaLinux9`, the base environment we will use for developing the projects of this course.
 
 For doubts or problems, please contact me [here](mailto:alberto.coppi@studenti.unipd.it) or open an issue [here](https://github.com/c0pp1/ScientificComputing4PhyicsStudents-projects/issues/new/choose).
 
@@ -10,10 +10,14 @@ For doubts or problems, please contact me [here](mailto:alberto.coppi@studenti.u
     - [1.1 Docker Desktop (GUI)](#1.1-docker-desktop-(gui))
       - [1.1.1 Ubuntu](#1.1.1-ubuntu)
       - [1.1.2 Arch Linux](#1.1.2-arch-linux)
+      - [1.1.3 Fedora](#1.1.3-fedora)
     - [1.2 Docker engine (CLI)](#1.2-docker-engine-(cli))
       - [1.2.1 Ubuntu](#1.2.1-ubuntu)
       - [1.2.2 Arch Linux](#1.2.2-arch-linux)
-    - [1.3 Daemon configuration file](#1.3-daemon-configuration-file)
+      - [1.2.3 Fedora](#1.2.3-fedora)
+    - [1.3 Post-installation (optional)](#1.3-post-installation-optional)
+        - [1.3.1 Avoid running explicitly docker as su](#1.3.1-avoid-running-explicitly-docker-as-su)
+        - [1.3.2 Daemon configuration file](#1.3.2-daemon-configuration-file)
 - [2. Run AlmaLinux 9 in a container](#2.-run-almalinux-9-in-a-container)
     - [2.1 Using Docker Desktop](#2.1-using-docker-desktop)
     - [2.2 Using Docker CLI](#2.2-using-docker-cli)
@@ -24,8 +28,8 @@ For doubts or problems, please contact me [here](mailto:alberto.coppi@studenti.u
 
 ## 1. Install Docker
 ### 1.0 Prerequisites
-To install Docker a linux system you need the following:
-- A linux system :)
+To install Docker a Linux system you need the following:
+- A Linux system :)
 - A processor with virtualization capabilities and the virtualization feature enabled in your BIOS/UEFI
 
 There are two ways to install Docker on your system: Docker Desktop is a graphical interface running its containers in a separate and dedicated VM storage; Docker engine is the command line interface.  
@@ -37,13 +41,12 @@ For each install method the instructions for some specific distributions are pro
 - [Install Docker engine](#12-docker-engine-cli)
 
 ### 1.1 Docker Desktop (GUI)
-Docker Desktop is available for Ubuntu/Debian based distributions, Red Hat Enterprise Linux (RHEL) and Fedora. There is also an experimental package for ArchLinux but this is not officially supported.  
-We will provide instructions for Ubuntu and Arch Linux (my personal system), for other systems refer to the [official documentation](https://docs.docker.com/desktop/setup/install/linux/).
+Docker Desktop is available for Ubuntu/Debian based distributions, Red Hat Enterprise Linux (RHEL) and Fedora. There is also an experimental package for ArchLinux but this is not officially supported. 
+We will provide instructions for Ubuntu, Arch Linux, and Fedora. For other systems refer to the [official documentation](https://docs.docker.com/desktop/setup/install/linux/).
 
 #### 1.1.1 Ubuntu
 Be sure to be on Ubuntu 22.04, 24.04 or the latest non-LTS and to have `gnome-terminal` installed if you are a non-gnome DE.  
 Recommended approach to install Docker Desktop on Ubuntu:
-
 1. Set up Docker's package repository.
     ```bash
     # Add Docker's official GPG key:
@@ -74,7 +77,6 @@ Recommended approach to install Docker Desktop on Ubuntu:
 
 #### 1.1.2 Arch Linux
 Docker Desktop for Arch Linux is still experimental. If you want to install it you can follow these steps:
-
 1. Install the Docker client binary on Linux. Static binaries for the Docker client are available for Linux as docker. You can use:
     ```bash
     wget https://download.docker.com/linux/static/stable/x86_64/docker-28.0.1.tgz -qO- | tar xvfz - docker/docker --strip-components=1
@@ -88,10 +90,25 @@ Docker Desktop for Arch Linux is still experimental. If you want to install it y
 
 See the [ArchWiki](https://wiki.archlinux.org/title/Docker) for more information.
 
+#### 1.1.3 Fedora
+Docker Desktop is available for Fedora as an RPM package.
+1. Set up Docker's repository. This step requires the package `dnf-plugins-core`, which is downloaded in the first command. The second command adds the repository.
+    ```bash
+    sudo dnf -y install dnf-plugins-core
+    sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+    ```
+2. Download the latest [RPM package](https://desktop.docker.com/linux/main/amd64/docker-desktop-x86_64.rpm?utm_source=docker&utm_medium=webreferral&utm_campaign=docs-driven-download-linux-amd64). If you prefer to use the terminal, just run:
+    ```bash
+    wget https://desktop.docker.com/linux/main/amd64/docker-desktop-x86_64.rpm
+    ```
+3. Install the package with dnf as follows:
+    ```bash
+    sudo dnf install ./docker-desktop-x86_64.rpm
+    ```
 
 ### 1.2 Docker engine (CLI)
 This section describes how to install Docker Engine on Linux, also known as Docker CE.  
-As before, we provide installation onstructions for Ubuntu and Arch Linux.
+As before, we provide installation instructions for Ubuntu and Arch Linux.
 
 #### 1.2.1 Ubuntu
 To install docker-ce do the following:
@@ -115,20 +132,6 @@ To install docker-ce do the following:
     ```bash
     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     ```
-3. Verify that the installation is successful by running the hello-world image:
-    ```bash
-    sudo docker run hello-world
-    ```
-To avoid the need of running `docker` with `sudo`, it is convenient to create and add the current user to the `docker` group. To do that follow these steps:
-1. Create the `docker` group.
-    ```bash
-    sudo groupadd docker
-    ```
-2. Add your user to the `docker` group.
-    ```bash
-    sudo usermod -aG docker $USER
-    ```
-3. Log out and log back in so that your group membership is re-evaluated or run `newgrp docker`.
 
 #### 1.2.2 Arch Linux
 1. Install the `docker` package.
@@ -141,7 +144,50 @@ To avoid the need of running `docker` with `sudo`, it is convenient to create an
     sudo systemctl start docker.socket
     ```
 
-### 1.3 Daemon configuration file
+#### 1.2.3 Fedora
+To install docker-ce do the following:
+1. Set up Docker's repository. This step requires the package `dnf-plugins-core`, which is downloaded in the first command. The second command adds the repository.
+    ```bash
+    sudo dnf -y install dnf-plugins-core
+    sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+    ```
+2. Install the Docker packages.
+    ```bash
+    sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    ```
+3. Start docker engine.
+    ```bash
+    sudo systemctl start docker
+    ```
+    > [!NOTE]  
+    > The previous command will start the Docker Engine services for your current boot. If you wish the service to start automatically, you can enable the service.
+    > ```bash
+    > sudo systemctl enable docker
+    > ```
+
+### 1.3 Post-installation (optional)
+
+You can verify that the installation is successful by running the Docker hello-world image:
+```bash
+sudo docker run hello-world
+```
+
+Following the installation, it is recommended to do some follow-up configuration. 
+The post-installation actions are more thoroughly documented in the [official documentation](https://docs.docker.com/engine/install/linux-postinstall/), but we will show here two very useful configuration steps...
+
+#### 1.3.1 Avoid running explicitly docker as su
+To avoid the need of running `docker` with `sudo`, it is convenient to create and add the current user to the `docker` group. This procedure is generally not dependent on the Linux system you are running on. Follow these steps:
+1. Create a new `docker` group.
+    ```bash
+    sudo groupadd docker
+    ```
+2. Add your user to the `docker` group.
+    ```bash
+    sudo usermod -aG docker $USER
+    ```
+3. Log out and log back in so that your group membership is re-evaluated, or run `newgrp docker` to achieve the same result.
+
+### 1.3.2 Daemon configuration file
 The Docker daemon can be configured to meet your specific needs through a configuration file. The default location of the configuration file on Linux is `/etc/docker/daemon.json`.  
 As an example, you can specify a different location for storing docker data (which can easily occupy $\mathcal{O}(10)$ GB os disk space), like a secondary hard disk. To do so specify the `"data-root": "<your-preferred-path>"` property in the config file.
 
