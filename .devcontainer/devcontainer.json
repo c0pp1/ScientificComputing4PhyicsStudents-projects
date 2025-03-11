@@ -1,14 +1,15 @@
 {
     "name": "AlmaLinux 9 Development Container",
-    "image": "almalinux:9",
+    "build": {
+        "dockerfile": "Dockerfile",
+    },
     "runArgs": ["--name", "almalinux9-container"],
     "settings": {
         "terminal.integrated.shell.linux": "/bin/bash"
     },
     "extensions": [
         "ms-vscode.cpptools",
-        "ms-python.python"
+        "julialang.language-julia"
     ],
-    "postCreateCommand": "dnf -y upgrade && dnf install -y git",
     "remoteUser": "root"
 }
