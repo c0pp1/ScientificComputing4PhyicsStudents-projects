@@ -12,13 +12,13 @@ For doubts or problems, please contact me [here](mailto:alberto.coppi@studenti.u
     - [1.0 Prerequisites](#10-prerequisites)
     - [1.1 Docker Desktop (GUI)](#11-docker-desktop-gui)
       - [1.1.1 Ubuntu](#111-ubuntu)
-      - [1.1.2 Arch Linux](#112-arch-linux)
+      - [1.1.2 ArchLinux](#112-archlinux)
       - [1.1.3 Fedora](#113-fedora)
     - [1.2 Docker engine (CLI)](#12-docker-engine-cli)
       - [1.2.1 Ubuntu](#121-ubuntu)
-      - [1.2.2 Arch Linux](#122-arch-linux)
+      - [1.2.2 ArchLinux](#122-archlinux)
       - [1.2.3 Fedora](#123-fedora)
-    - [1.3 Post-installation (optional)](#13-post-installation-optional)
+    - [1.3 Post-installation (strongly suggested)](#13-post-installation-strongly-suggested)
       - [1.3.1 Avoid running explicitly docker as su](#131-avoid-running-explicitly-docker-as-su)
       - [1.3.2 Daemon configuration file](#132-daemon-configuration-file)
   - [2. Run AlmaLinux 9 in a container](#2-run-almalinux-9-in-a-container)
@@ -39,7 +39,7 @@ To install Docker a Linux system you need the following:
 - A processor with virtualization capabilities and the virtualization feature enabled in your BIOS/UEFI
 
 There are two ways to install Docker on your system: Docker Desktop is a graphical interface running its containers in a separate and dedicated VM storage; Docker engine is the command line interface.  
-In principle you can have both installed on your system, but you can incur in problems in some particular circumstances, therefore this is discouraged.
+In principle, you can have both installed on your system, but you can incur in problems in some particular circumstances, therefore this is discouraged.
 
 For each install method the instructions for some specific distributions are provided
 
@@ -48,8 +48,8 @@ For each install method the instructions for some specific distributions are pro
 
 ### 1.1 Docker Desktop (GUI)
 
-Docker Desktop is available for Ubuntu/Debian based distributions, Red Hat Enterprise Linux (RHEL) and Fedora. There is also an experimental package for ArchLinux but this is not officially supported.
-We will provide instructions for Ubuntu, Arch Linux, and Fedora. For other systems refer to the [official documentation](https://docs.docker.com/desktop/setup/install/linux/).
+Docker Desktop is available for Ubuntu/Debian based distributions, Red Hat Enterprise Linux (RHEL) and Fedora. There is also an experimental package for ArchLinux, but this is not officially supported.
+We will provide instructions for Ubuntu, ArchLinux, and Fedora. For other systems refer to the [official documentation](https://docs.docker.com/desktop/setup/install/linux/).
 
 #### 1.1.1 Ubuntu
 
@@ -89,9 +89,9 @@ Recommended approach to install Docker Desktop on Ubuntu:
 > N: Download is performed unsandboxed as root, as file '/home/user/Downloads/docker-desktop.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)
 > ```
 
-#### 1.1.2 Arch Linux
+#### 1.1.2 ArchLinux
 
-Docker Desktop for Arch Linux is still experimental. If you want to install it you can follow these steps:
+Docker Desktop for ArchLinux is still experimental. If you want to install it you can follow these steps:
 
 1. Install the Docker client binary on Linux. Static binaries for the Docker client are available for Linux as docker. You can use:
 
@@ -135,7 +135,7 @@ Docker Desktop is available for Fedora as an RPM package.
 ### 1.2 Docker engine (CLI)
 
 This section describes how to install Docker Engine on Linux, also known as Docker CE.  
-As before, we provide installation instructions for Ubuntu and Arch Linux.
+As before, we provide installation instructions for Ubuntu, ArchLinux, and Fedora.
 
 #### 1.2.1 Ubuntu
 
@@ -165,7 +165,7 @@ To install docker-ce do the following:
     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     ```
 
-#### 1.2.2 Arch Linux
+#### 1.2.2 ArchLinux
 
 1. Install the `docker` package.
 
@@ -210,7 +210,7 @@ To install docker-ce do the following:
 > sudo systemctl enable docker
 > ```
 
-### 1.3 Post-installation (optional)
+### 1.3 Post-installation (strongly suggested)
 
 You can verify that the installation is successful by running the Docker hello-world image:
 
@@ -417,7 +417,7 @@ In the following we explain how to run a docker container with the AlmaLinux 9 i
 
     This command will start a new container named `almalinux9-container` and open an interactive terminal session inside it. Optionally you can
 
-    ```
+    ```bash
     dnf -y upgrade
     ```
 
@@ -433,11 +433,11 @@ In the following we explain how to run a docker container with the AlmaLinux 9 i
 
 ## 3. Attach Visual Studio Code to a container
 
-Visual Studio Code provides a convenient way to develop inside a Docker container using the Remote - Containers extension. You can either attach to a running container or let VS Code crete one for you, configuring the `devcontainer.json` for your repository.
+Visual Studio Code provides a convenient way to develop inside a Docker container using the Remote - Containers extension. You can either attach to a running container or let VS Code create one for you, configuring the `devcontainer.json` for your repository.
 
 ### 3.0 Install the Remote - Containers extension
 
-To attach to a Docker container first of all you need to install the required extension:
+To attach to a Docker container, first you need to install the required extension:
 
 - Open Visual Studio Code.
 - Go to the Extensions view by clicking on the Extensions icon in the Activity Bar on the side of the window.
@@ -474,7 +474,7 @@ To configure a development container using `devcontainer.json`, follow these ste
     touch .devcontainer/devcontainer.json
     ```
 
-    Otherwise you can just create a `.devcontainer.json` in your project root. (pay attention to the initial dot!)
+    Otherwise, you can just create a `.devcontainer.json` in your project root. (pay attention to the initial dot!)
 
 3. **Edit the `devcontainer.json` file with the following content:**
 
@@ -500,7 +500,7 @@ To configure a development container using `devcontainer.json`, follow these ste
     - The Docker image to use (`almalinux:9`).
     - Additional arguments to pass when running the container.
     - VS Code settings to apply inside the container.
-    - Extensions to install in the container (I put extension for C++ and Python but you can customize this with your preferred extensions).
+    - Extensions to install in the container (I put extension for C++ and Python, but you can customize this with your preferred extensions).
     - A command to run after the container is created (e.g., installing Git).
     - The user to use inside the container (`root`).
 
