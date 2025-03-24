@@ -13,7 +13,10 @@
     "extensions": [
         "ms-vscode.cpptools",
         "ms-vscode.cmake-tools",
-        "julialang.language-julia"
+        "julialang.language-julia",
+        "ms-python.python",
+        "ms-python.debugpy",
+        "ms-toolsai.jupyter"
     ],
     "remoteUser": "${localEnv:USER}"
 }
