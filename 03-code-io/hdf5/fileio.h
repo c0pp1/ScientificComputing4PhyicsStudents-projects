@@ -40,7 +40,7 @@ void dump_vector_hdf5(int N, const char *fname, const char *dataset_name, double
 
     printf("Writing file <%s> ... ", fname);
 
-    // Create a new file using the default properties.
+    // create a new file & dataset
     file_id = H5Fcreate(fname, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
     dataspace_id = H5Screate_simple(1, dims, NULL);
     dataset_id = H5Dcreate(file_id, dataset_name, H5T_NATIVE_DOUBLE, dataspace_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
