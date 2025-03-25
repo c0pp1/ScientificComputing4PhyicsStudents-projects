@@ -32,7 +32,7 @@ int main(){
     const float x_val = 0.1;
     const float y_val = 7.1;
     int dims[3] = {10,static_cast<int>(1e6),static_cast<int>(1e8)};
-    float exp_res = 7.4;
+    float exp_res = x_val+y_val;
 
     for (int it = 0;it<3;it++){
         cout << "N = " << dims[it] << "\n";
