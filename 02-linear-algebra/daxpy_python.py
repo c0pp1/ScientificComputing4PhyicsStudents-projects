@@ -22,16 +22,16 @@ if __name__ == "__main__":
     print("Benchmarking without numpy:\n")
     for N in dims:
         print(f"N = {N}")
-        x = [0.1 for it in range(N)]
-        y = [7.1 for it in range(N)]
+        x = [x_val for it in range(N)]
+        y = [y_val for it in range(N)]
         res = daxy(a,x,y,fnumpy=False)
         assert all(abs(component - 7.4)<1e-6 for component in res), f"{res[0]} != 7.4"
         print('\n')
     print("Benchmarking with numpy:\n")
     for N in dims:
         print(f"N = {N}")
-        x = [0.1 for it in range(N)]
-        y = [7.1 for it in range(N)]
+        x = [x_val for it in range(N)]
+        y = [y_val for it in range(N)]
         res = daxy(a,x,y)
         assert all(abs(component - 7.4)<1e-6 for component in res), f"{res[0]} != 7.4"
         print('\n')
