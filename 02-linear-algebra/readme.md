@@ -1,7 +1,5 @@
 # task 02 handout
 
-submitted by Barone Francesco Pio
-
 ## Q&A
 
 1) Did you find any problems in running the codes for some $N$. If so, do you have an idea why?
