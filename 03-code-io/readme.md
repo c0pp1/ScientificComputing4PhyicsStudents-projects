@@ -1,7 +1,5 @@
 # task 03 handout
 
-handout from Francesco Pio Barone
-
 ## Submission comments
 
 ### 1: generate arrays
