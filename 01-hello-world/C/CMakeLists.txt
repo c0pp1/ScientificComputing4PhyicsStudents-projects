@@ -1,1 +1,1 @@
-add_executable(daxpy daxpy.c)
+add_executable(01daxpy daxpy.c)
