@@ -8,5 +8,5 @@ find_package(Boost 1.70 COMPONENTS program_options REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # Path: 01-hello-world/CMakeLists.txt
-add_executable(hello-world main.cpp)
-target_link_libraries(hello-world ${Boost_LIBRARIES})
+add_executable(01hello-world main.cpp)
+target_link_libraries(01hello-world ${Boost_LIBRARIES})

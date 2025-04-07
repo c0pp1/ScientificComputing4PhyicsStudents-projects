@@ -4,3 +4,5 @@ project(SC4PS)
 # compile the source code in each directory
 add_subdirectory(01-hello-world/C++)
 add_subdirectory(01-hello-world/C)
+add_subdirectory(02-linear-algebra/C++)
+add_subdirectory(02-linear-algebra/C)
