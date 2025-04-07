@@ -5,7 +5,7 @@ from tqdm import trange
 def expcos(x):
     return np.exp(x)*np.cos(x)
 
-def num_int(N:int,x_inf:float = 0.,x_sup:float = np.pi, out_file:str = "04-discrete-math/data.txt", fprint:bool = False, func:callable = expcos):
+def num_int(N:int,x_inf:float = 0.,x_sup:float = np.pi, out_file:str = "04-discrete-math/Python/data.txt", fprint:bool = False, func:callable = expcos):
     samp_points = np.linspace(x_inf,x_sup,N)
     func_vals = np.array([func(x) for x in samp_points])
     
@@ -44,9 +44,9 @@ if __name__ == "__main__":
     plt.ylabel(r"$\epsilon_{rel}$")
     plt.yscale("log")
     
-    plt.savefig("04-discrete-math/epsvN.pdf", format="pdf", bbox_inches="tight")
-    plt.savefig("04-discrete-math/epsvN.png", format="png", bbox_inches="tight")
+    plt.savefig("04-discrete-math/Python/epsvN.pdf", format="pdf", bbox_inches="tight")
+    plt.savefig("04-discrete-math/Python/epsvN.png", format="png", bbox_inches="tight")
     # We check the num_int_fom_file 
-    I_res_read = num_int_from_file("04-discrete-math/data.txt")
+    I_res_read = num_int_from_file("04-discrete-math/Python/data.txt")
     assert np.abs(I_res_read-I_res) < 1e-8, f"The result obtained via reading the data file does not coincide. ({I_res} != {I_res_read})"
     
