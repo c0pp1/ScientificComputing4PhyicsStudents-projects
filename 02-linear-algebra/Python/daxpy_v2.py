@@ -1,6 +1,6 @@
 import numpy as np
 from time import time
-def daxy(a:float, x:list[float], y:list[float],fnumpy:bool =True):
+def daxpy(a:float, x:list[float], y:list[float],fnumpy:bool =True):
     N = len(x)
     assert N == len(y), f"x and y must have the same dimension ({N}!={len(y)})"
     print(f"Initiating computation...")
@@ -24,7 +24,7 @@ if __name__ == "__main__":
         print(f"N = {N}")
         x = [x_val for it in range(N)]
         y = [y_val for it in range(N)]
-        res = daxy(a,x,y,fnumpy=False)
+        res = daxpy(a,x,y,fnumpy=False)
         assert all(abs(component - 7.4)<1e-6 for component in res), f"{res[0]} != 7.4"
         print('\n')
     print("Benchmarking with numpy:\n")
@@ -32,7 +32,7 @@ if __name__ == "__main__":
         print(f"N = {N}")
         x = [x_val for it in range(N)]
         y = [y_val for it in range(N)]
-        res = daxy(a,x,y)
+        res = daxpy(a,x,y)
         assert all(abs(component - 7.4)<1e-6 for component in res), f"{res[0]} != 7.4"
         print('\n')
     
