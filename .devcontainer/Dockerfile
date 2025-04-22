@@ -10,7 +10,7 @@ RUN dnf -y update && \
     dnf -y install nano gcc gcc-c++ gdb make cmake wget git boost-devel boost-program-options \
     gsl-devel zlib-devel && \
     dnf clean all
-
+RUN dnf install -y python3.11 && dnf install -y python3.11-pip
 # Install HDF5
 RUN mkdir -p /root/hdf5_install && cd /root/hdf5_install && \
     wget https://github.com/HDFGroup/hdf5/releases/download/hdf5_1.14.6/hdf5-1.14.6.tar.gz && \
@@ -45,6 +45,7 @@ WORKDIR /home/$USERNAME
 
 # Install Julia
 RUN curl -fsSL https://install.julialang.org | sh -s -- -y
+
 
 # Define the default command to start an interactive bash shell
 CMD ["/bin/bash"]
