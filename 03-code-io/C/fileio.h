@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <hdf5.h>
 
 void read_vector_binary(int N, const char *fname, double **vector) {
     FILE *file = fopen(fname, "rb");

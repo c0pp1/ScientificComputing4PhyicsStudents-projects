@@ -7,8 +7,24 @@ ENV LANG=C.UTF-8 \
 
 # Update system packages and install essential development tools
 RUN dnf -y update && \
-    dnf -y install nano gcc gcc-c++ make cmake wget git boost-devel boost-program-options && \
+    dnf -y install nano gcc gcc-c++ gdb make cmake wget git boost-devel boost-program-options \
+    gsl-devel zlib-devel && \
     dnf clean all
+
+# Install HDF5
+RUN mkdir -p /root/hdf5_install && cd /root/hdf5_install && \
+    wget https://github.com/HDFGroup/hdf5/releases/download/hdf5_1.14.6/hdf5-1.14.6.tar.gz && \
+    tar -xzf hdf5-1.14.6.tar.gz && \
+    cd hdf5-1.14.6 && \
+    ./configure --prefix=/usr/local/hdf5 --enable-cxx && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf hdf5-1.14.6.tar.gz
+# Set environment variables for HDF5
+ENV HDF5_DIR=/usr/local/hdf5 \
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/hdf5/lib \
+    PATH=$PATH:/usr/local/hdf5/bin
 
 # Create non-priviliged user
 ARG USERNAME=user
@@ -17,7 +33,7 @@ ARG USER_GID=$USER_UID
 
 RUN groupadd -g $USER_GID $USERNAME && \
     useradd -m -u $USER_UID -g $USERNAME $USERNAME
-RUN mkdir /etc/sudoers.d && \
+RUN mkdir -p /etc/sudoers.d && \
     echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME && \
     chmod 0440 /etc/sudoers.d/$USERNAME
 
