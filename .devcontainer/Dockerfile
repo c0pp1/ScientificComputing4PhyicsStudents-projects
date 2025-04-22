@@ -9,7 +9,7 @@ ENV LANG=C.UTF-8 \
 RUN dnf -y update && \
     dnf -y install nano gcc gcc-c++ make cmake wget git boost-devel boost-program-options && \
     dnf clean all
-
+RUN dnf install -y python3.11 && dnf install -y python3.11-pip
 # Create non-priviliged user
 ARG USERNAME=user
 ARG USER_UID=1000
@@ -29,6 +29,7 @@ WORKDIR /home/$USERNAME
 
 # Install Julia
 RUN curl -fsSL https://install.julialang.org | sh -s -- -y
+
 
 # Define the default command to start an interactive bash shell
 CMD ["/bin/bash"]
