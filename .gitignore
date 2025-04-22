@@ -175,3 +175,12 @@ cython_debug/
 
 # data
 *.dat
+*.txt
+*.hd5
+
+# executables
+*.exe
+*.dll
+*.so
+*.o
+*.x
