@@ -50,19 +50,24 @@ int main(int argv, char *argc[]) {
     std::cout << "Command line arguments:\n";
     int N = vm["N"].as<int>();
     std::string fname_prefix = vm["fname_prefix"].as<std::string>();
+    std::string dataset_name = "vector_data";
     std::cout << "Generating vectors with N=" << N << " elements on files " << fname_prefix << std::endl;
 
-    double *vec = nullptr;
+    double *vec = new double[N];
+    if (vec == nullptr) {
+        std::cerr << "Memory allocation failed\n";
+        return EXIT_FAILURE;
+    }
     std::cout << "Generating vector X ..." << std::endl;
     generate_vector(N, vec, 0.1);
 
-    std::string filename = fname_prefix + "_N" + std::to_string(N) + "_x.dat";
-    dump_vector_binary(N, filename, vec);
+    std::string filename = fname_prefix + "_N" + std::to_string(N) + "_x.h5";
+    dump_vector_hdf5(N, filename, dataset_name, vec);
 
     std::cout << "Generating vector Y ...\n";
     generate_vector(N, vec, 7.1);
-    filename = fname_prefix + "_N" + std::to_string(N) + "_y.dat";
-    dump_vector_binary(N, filename, vec);
+    filename = fname_prefix + "_N" + std::to_string(N) + "_y.h5";
+    dump_vector_hdf5(N, filename, dataset_name, vec);
     // clean up
     delete[] vec;
     return 0;

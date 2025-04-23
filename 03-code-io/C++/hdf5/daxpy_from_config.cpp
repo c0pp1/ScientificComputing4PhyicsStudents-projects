@@ -2,7 +2,7 @@
 #include <string>
 
 #include "fileio.hpp"
-#include "parser.h"
+#include "../parser.h"
 
 using namespace std;
 void daxpy(int n, double a, double *x, double *y) {
@@ -36,10 +36,10 @@ int main(int argc, char* argv[]) {
     // Read config from file
     config_option_t co;
     if ((co = read_config_file(fname_config.c_str())) == NULL) {
-        printf("read_config_file() error");
+        cout << "read_config_file() error" << endl;
         return EXIT_FAILURE;
     }
-    printf("parsed from .conf:\n");
+    cout << "parsed from .conf:" << endl;
     while(1) {
         cout << "\t- " << co->key << " -> " << co->value << endl;
 
@@ -60,23 +60,19 @@ int main(int argc, char* argv[]) {
     }
 
     // Allocate memory on the heap
-    double *x = new double[N];
-    double *y = new double[N];
-
-    // Check if memory allocation was successful
-    if (x == nullptr || y == nullptr) {
-        std::cerr << "Memory allocation failed" << std::endl;
-        return 1;
-    }
+    double* x = nullptr, *y = nullptr;
 
     // Initialize x and y
     // reading x and y
-    read_vector_binary(N, fname_x, x);
-    read_vector_binary(N, fname_y, y);
+    read_vector_hdf5(N, fname_x, "vector_data", x);
+    read_vector_hdf5(N, fname_y, "vector_data", y);
 
     daxpy(N, a, x, y);
 
-    dump_vector_binary(N, fname_prefix + "_N" + to_string(N) + "_d.dat", y);
+    cout << "[info] look at first result: d[0] = " << y[0] << endl;
+    dump_vector_hdf5(N, fname_prefix + "_N" + to_string(N) + "_d.h5", "vector_data", y);
+    read_vector_hdf5(N, fname_prefix + "_N" + to_string(N) + "_d.h5", "vector_data", x);
+    cout << "[info] look at first read result: d[0] = " << x[0] << endl;
 
     delete[] x;
     delete[] y;

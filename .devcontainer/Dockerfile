@@ -31,6 +31,8 @@ ARG USERNAME=user
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
+RUN echo "Creating user $USERNAME with UID: $USER_UID and GID: $USER_GID"
+
 RUN groupadd -g $USER_GID $USERNAME && \
     useradd -m -u $USER_UID -g $USERNAME $USERNAME
 RUN mkdir -p /etc/sudoers.d && \
