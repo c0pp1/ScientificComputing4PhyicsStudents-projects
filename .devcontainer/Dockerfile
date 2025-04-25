@@ -11,6 +11,19 @@ RUN dnf -y update && \
     gsl-devel zlib-devel && \
     dnf clean all
 RUN dnf install -y python3.11 && dnf install -y python3.11-pip
+
+# Install eigen
+RUN mkdir -p /root/eigen_install && cd /root/eigen_install && \
+    wget https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz && \
+    tar -xzf eigen-3.4.0.tar.gz && \
+    cd eigen-3.4.0 && \
+    mkdir build && cd build && \
+    cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf eigen-3.4.0.tar.gz
+
 # Install HDF5
 RUN mkdir -p /root/hdf5_install && cd /root/hdf5_install && \
     wget https://github.com/HDFGroup/hdf5/releases/download/hdf5_1.14.6/hdf5-1.14.6.tar.gz && \
