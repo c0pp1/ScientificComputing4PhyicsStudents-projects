@@ -39,6 +39,18 @@ ENV HDF5_DIR=/usr/local/hdf5 \
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/hdf5/lib \
     PATH=$PATH:/usr/local/hdf5/bin
 
+# Install fftw3
+RUN mkdir -p /root/fftw3_install && cd /root/fftw3_install && \
+    wget https://www.fftw.org/fftw-3.3.10.tar.gz && \
+    tar -xzf fftw-3.3.10.tar.gz && \
+    cd fftw-3.3.10 && \
+    ./configure --enable-shared --enable-threads && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf fftw-3.3.10.tar.gz
+
+
 # Create non-priviliged user
 ARG USERNAME=user
 ARG USER_UID=1000
@@ -61,6 +73,8 @@ WORKDIR /home/$USERNAME
 # Install Julia
 RUN curl -fsSL https://install.julialang.org | sh -s -- -y
 
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+ENV PATH=$PATH:/usr/local/bin
 
 # Define the default command to start an interactive bash shell
 CMD ["/bin/bash"]

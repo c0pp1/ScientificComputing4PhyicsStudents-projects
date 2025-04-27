@@ -179,6 +179,9 @@ cython_debug/
 *.hd5
 *.h5
 
+# except CMake files
+!*CMakeLists.txt
+
 # executables
 *.exe
 *.dll
