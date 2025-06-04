@@ -172,3 +172,19 @@ cython_debug/
 
 # vscode
 **/.vscode/
+
+# data
+*.dat
+*.txt
+*.hd5
+*.h5
+
+# except CMake files
+!*CMakeLists.txt
+
+# executables
+*.exe
+*.dll
+*.so
+*.o
+*.x

@@ -3,7 +3,7 @@
     "build": {
         "dockerfile": "Dockerfile",
         "args": {
-            "USERNAME": "${localEnv:USER}",
+            "USERNAME": "scps",
         }
     },
     "runArgs": ["--name", "almalinux9-container"],
@@ -18,5 +18,5 @@
         "ms-python.debugpy",
         "ms-toolsai.jupyter"
     ],
-    "remoteUser": "${localEnv:USER}"
+    "remoteUser": "scps"
 }

@@ -1,4 +1,7 @@
+#ifndef PARSER_H
+#define PARSER_H
 #define CONFIG_ARG_MAX_BYTES 512
+#include <cstring>
 
 typedef struct config_option config_option;
 typedef config_option* config_option_t;
@@ -21,7 +24,7 @@ config_option_t read_config_file(const char* path) {
     
     while(1) {
         config_option_t co = NULL;
-        if ((co = calloc(1, sizeof(config_option))) == NULL)
+        if ((co = (config_option_t)calloc(1, sizeof(config_option))) == NULL)
             continue;
         memset(co, 0, sizeof(config_option));
         co->prev = last_co_addr;
@@ -46,3 +49,5 @@ config_option_t read_config_file(const char* path) {
     }
     return last_co_addr;
 }
+
+#endif // PARSER_H
