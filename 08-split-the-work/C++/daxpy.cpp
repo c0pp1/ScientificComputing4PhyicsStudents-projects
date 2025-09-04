@@ -1,0 +1,151 @@
+#include <assert.h>
+#include <cmath>
+#include <iostream>
+#include <chrono>
+
+double KahanBabushkaNeumaierSum(const double *vec, int n) {
+    /*
+    Kahan-Babushka-Neumaier summation algorithm
+    This algorithm is a modification of the Kahan summation algorithm that uses two variables
+    to keep track of the compensation for lost low-order bits.
+    */
+
+    double sum = 0.0, c = 0.0;
+
+    for (int i = 0; i < n; i++) {
+        double t = sum + vec[i];
+        if (abs(sum) >= abs(vec[i])) {
+            c += (sum - t) + vec[i]; // c is the compensation for low-order bits lost from vec[i]
+        } else {
+            c += (vec[i] - t) + sum; // c is the compensation for low-order bits lost from sum
+        }
+        sum = t;
+    }
+    return sum + c;
+}
+
+void daxpy_chunked(int n, double a, double *x, double *y, int chunk_size=0) {
+
+    if (n <= 0 || a == 0.0) {
+        return;
+    }
+
+    if (chunk_size <= 1) {
+        chunk_size = n; // default chunk size
+    }
+    assert(chunk_size <= n);
+
+    int n_chunks = n / chunk_size;
+    int remainder = n % chunk_size;
+
+    // Process eventual smaller chunk first
+    for (int i = 0; i < remainder; i++) {
+        y[i] += a * x[i];
+    }
+
+    int start_index = remainder;
+    for (int chunk = 0; chunk < n_chunks; chunk++) {
+        for (int i = 0; i < chunk_size; i++) {
+            y[start_index + i] += a * x[start_index + i];
+        }
+        start_index += chunk_size;
+    }
+}
+
+double sum_chunked(int n, double *x, int chunk_size=0) {
+
+    if (n <= 0) {
+        return 0.0;
+    }
+
+    if (chunk_size <= 1) {
+        chunk_size = n; // default chunk size
+    }
+    assert(chunk_size <= n);
+
+    int n_chunks = n / chunk_size;
+    int remainder = n % chunk_size;
+    double* partial_sums = new double[n_chunks + (remainder > 0 ? 1 : 0)];
+
+    // Process eventual smaller chunk first
+    // but put it in last element of partial_sums array
+    double sum = 0.0;
+    for (int i = 0; i < remainder; i++) {
+        sum += x[i];
+    }
+    partial_sums[n_chunks - (remainder > 0 ? 0 : 1)] = sum;
+
+    // Now process all full chunks
+    int start_index = remainder;
+    for (int chunk = 0; chunk < n_chunks; chunk++) {
+        partial_sums[chunk] = KahanBabushkaNeumaierSum(x + start_index, chunk_size);
+        start_index += chunk_size;
+    }
+
+    // Now sum up all partial sums
+    return KahanBabushkaNeumaierSum(partial_sums, n_chunks + (remainder > 0 ? 1 : 0));
+}
+
+int main(int argc, char* argv[]) {
+    
+    const double TOLERANCE = 1e-15;
+    const double a = 3.;
+    const size_t ARRAY_SIZES[] = {10, 1000, 10000, 1000000, 100000000};
+    const size_t CHUNK_SIZES[] = {1, 4, 8, 10};
+
+    // Test memory allocation on the stack and heap
+    // for each array size and implementation of daxpy
+    for (const size_t n: ARRAY_SIZES) {
+
+        std::cout << "----------------------------------------" << std::endl;
+        std::cout << "Testing with n = " << n << std::endl;
+
+        // Allocate memory on the heap
+        double *x = new double[n];
+        double *y = new double[n];
+
+        // Check if memory allocation was successful
+        if (x == nullptr || y == nullptr) {
+            std::cerr << "Memory allocation failed" << std::endl;
+            return 1;
+        }
+        // Initialize x
+        for (size_t j = 0; j < n; j++) {
+            x[j] = 0.1;
+        }
+
+        for (const size_t chunk_size: CHUNK_SIZES) {
+ 
+            // Since the y array will be modified by the previous daxpy call,
+            // have to reinitialize it.
+            for (size_t j = 0; j < n; j++) {
+                y[j] = 7.1;
+            }
+
+            auto start = std::chrono::high_resolution_clock::now();
+            daxpy_chunked(n, a, x, y, chunk_size);
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> elapsed = end - start;
+            std::cout << "chunk size " << chunk_size << "\n\t daxpy time: " << elapsed.count() << " seconds" << std::endl;
+            // Verify result
+            for (size_t j = 0; j < n; j++) {
+                assert(fabs(y[j] - (7.1 + a * 0.1)) < TOLERANCE);
+            }
+
+            // sum
+            start = std::chrono::high_resolution_clock::now();
+            auto sum = sum_chunked(n, y, chunk_size);
+            end = std::chrono::high_resolution_clock::now();
+            elapsed = end - start;
+            std::cout << "\t sum time: " << elapsed.count() << " seconds" << std::endl;
+            // Verify result
+            assert(fabs(sum - n * (7.1 + a * 0.1)) < n*TOLERANCE);
+        }
+
+        delete[] x;
+        delete[] y;
+        
+        std::cout << "----------------------------------------" << std::endl;
+    }
+    return 0;
+}
