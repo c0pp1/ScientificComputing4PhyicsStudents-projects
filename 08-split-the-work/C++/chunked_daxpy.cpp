@@ -35,20 +35,16 @@ void daxpy_chunked(int n, double a, double *x, double *y, int chunk_size=0) {
     }
     assert(chunk_size <= n);
 
-    int n_chunks = n / chunk_size;
     int remainder = n % chunk_size;
-
     // Process eventual smaller chunk first
     for (int i = 0; i < remainder; i++) {
         y[i] += a * x[i];
     }
 
-    int start_index = remainder;
-    for (int chunk = 0; chunk < n_chunks; chunk++) {
+    for (int chunk_start = remainder; chunk_start < n; chunk_start += chunk_size) {
         for (int i = 0; i < chunk_size; i++) {
-            y[start_index + i] += a * x[start_index + i];
+            y[chunk_start + i] += a * x[chunk_start + i];
         }
-        start_index += chunk_size;
     }
 }
 
@@ -75,11 +71,9 @@ double sum_chunked(int n, double *x, int chunk_size=0) {
     }
     partial_sums[n_chunks - (remainder > 0 ? 0 : 1)] = sum;
 
-    // Now process all full chunks
-    int start_index = remainder;
-    for (int chunk = 0; chunk < n_chunks; chunk++) {
+    // Now process all full chunks;
+    for (int chunk = 0, start_index = remainder; chunk < n_chunks; chunk++, start_index += chunk_size) {
         partial_sums[chunk] = KahanBabushkaNeumaierSum(x + start_index, chunk_size);
-        start_index += chunk_size;
     }
 
     // Now sum up all partial sums
