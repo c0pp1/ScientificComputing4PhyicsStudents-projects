@@ -8,7 +8,7 @@ ENV LANG=C.UTF-8 \
 # Update system packages and install essential development tools
 RUN dnf -y update && \
     dnf -y install nano gcc gcc-c++ gdb make cmake wget git boost-devel boost-program-options \
-    gsl-devel zlib-devel && \
+    gsl-devel zlib-devel openmpi && \
     dnf clean all
 RUN dnf install -y python3.11 && dnf install -y python3.11-pip
 
